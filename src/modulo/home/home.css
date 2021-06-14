@@ -1,0 +1,35 @@
+
+
+.Homee {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #36393f;
+
+}
+.DottedBox_content {
+    font-size: 15px;
+}
+
+.form_ {
+    margin-top: 30%;
+    margin-left: 10%;
+}
+.form_ .ant-input {
+    background-color: #303339 ;
+    border-radius: 5px ;
+    border: 1px solid rgb(27, 27, 27) ;
+    color: rgb(199, 199, 199);
+  }
+  
+ .form_ .ant-input:focus {
+    border-color: rgb(22, 22, 22);
+    outline: 0;
+    box-shadow: none
+}
+
+.form_ .ant-input:hover {
+    border-color: rgb(22, 22, 22);
+    outline: 0;
+}
