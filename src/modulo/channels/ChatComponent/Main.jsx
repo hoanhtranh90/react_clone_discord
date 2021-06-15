@@ -8,18 +8,24 @@ import SockJsClient from 'react-stomp';
 import { useRef } from "react";
 import axios from "axios";
 import { Button } from '@material-ui/core';
+import { createRoom, loadMore } from "./chat.Reducer";
+import { connect } from 'react-redux';
 
 
-const Main = (props) => {
+const Main = ({
+    id,data,room,
+    createRoom,loadMore
+}) => {
+    console.log("data: ",data)
+    console.log("room: ",room)
     const url = "http://localhost:8080"
-    const id = props.id
     const messageRef = useRef();
     var connected = false;
     var socket = '';
     var stompClient = '';
     let clientRef;
     const [mess, setMess] = useState([])
-    const [data,setData] = useState([])
+    // const [data,setData] = useState([])
     const send = (e) => {
         // if (stompClient && stompClient.connected) {
         //     const msg = { name: "You", content: e, type: 'CHAT' };
@@ -39,11 +45,19 @@ const Main = (props) => {
 
     }
     useEffect(() => {
-        axios.get("http://localhost:8080/history?roomId="+id).then(res => {
-            console.log("=>>>",res)
-            setMess(res.data)
-        })
+        // axios.post("http://localhost:8080/saveRoom",{
+        //     name:id
+        // }).then(res => {
+        //     axios.get("http://localhost:8080/history?roomId="+id).then(res => {
+        //         console.log("=>>>",res)
+        //         setMess(res.data)
+        //     })
+        // })
+        createRoom(id);
+        loadMore(id);
+        
     },[id])
+
 
     // const connect = () => {
     //     socket = new SockJS("http://localhost:8080/ws");
@@ -106,4 +120,14 @@ const Main = (props) => {
         </div>
     )
 }
-export default Main;
+const mapStateToProps = (state) => ({
+    data: state.chatReducer.data,
+    room: state.chatReducer.room,
+  });
+  
+const mapDispatchToProps = {
+    loadMore,
+    createRoom,
+  };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

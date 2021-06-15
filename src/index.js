@@ -4,6 +4,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './shared/store';
+import setupAxiosInterceptors from './config/axios-interceptor';
+
+const dispatch = store
+setupAxiosInterceptors(dispatch, () => { });
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

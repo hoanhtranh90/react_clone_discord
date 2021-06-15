@@ -21,6 +21,7 @@ export const login = ({ username, password }) => {
 
   const AuthAPI = {
     login,
+    
   };
   
   export default AuthAPI;
