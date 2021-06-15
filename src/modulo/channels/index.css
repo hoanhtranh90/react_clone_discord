@@ -1,0 +1,13 @@
+.App {
+    display: grid;
+    height: 100vh;
+    overflow: hidden;
+    grid-template: repeat(1, 1fr) / repeat(5, 1fr);
+  
+  
+  }
+  .Bar {
+    background-color: #252525;
+    color: white;
+    overflow: auto;
+  }
