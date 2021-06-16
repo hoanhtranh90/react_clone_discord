@@ -13,11 +13,11 @@ import { connect } from 'react-redux';
 
 
 const Main = ({
-    id,data,room,
-    createRoom,loadMore
+    id, data, room,
+    createRoom, loadMore, isLoading
 }) => {
-    console.log("data: ",data)
-    console.log("room: ",room)
+    console.log("data: ", data)
+    console.log("room: ", room)
     const url = "http://localhost:8080"
     const messageRef = useRef();
     var connected = false;
@@ -32,12 +32,12 @@ const Main = ({
         //     stompClient.send(`${url}/chatapp/chat/${id}`, JSON.stringify(msg), {});
         // }
         let msg = {
-            username:"YOU",
-            content:e,
-            roomId:id
-          }
-          clientRef.sendMessage('/app/send/message'+"/"+id ,JSON.stringify(msg));
-        
+            username: "YOU",
+            content: e,
+            roomId: id
+        }
+        clientRef.sendMessage('/app/send/message' + "/" + id, JSON.stringify(msg));
+        setMess([...mess, msg]);
     }
     const sendMessage = (e) => {
         send(e);
@@ -53,10 +53,17 @@ const Main = ({
         //         setMess(res.data)
         //     })
         // })
-        createRoom(id);
-        loadMore(id);
-        
-    },[id])
+        async function promise() {
+            await createRoom(id, "UserName");
+            await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>1")
+            setMess(data)
+            await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>2")
+
+        }
+        promise()
+        // loadMore(id);
+
+    }, [id])
 
 
     // const connect = () => {
@@ -86,34 +93,34 @@ const Main = ({
     // const tickleConnection = () => {
     //     connected ? disconnect() : connect();
     // }
-
+    if (isLoading) return <div>Loading</div>
+    else
     return (
         <div style={{ height: 400, width: 600, backgroundColor: '#ebebeb' }} >
             <SockJsClient url='http://localhost:8080/socket' topics={[`/topic/${id}`]}
-                onConnect= { () =>
-                {
-                //  Fetch("https://messager-ws.herokuapp.com/history", {
-                //     method: "GET"
-                //   }).then((response) => {
-                //     setData(response.body)
-                //     // console.log(response.body[0]);
-                //   });
-                console.log("conntect Success")
+                onConnect={() => {
+                    //  Fetch("https://messager-ws.herokuapp.com/history", {
+                    //     method: "GET"
+                    //   }).then((response) => {
+                    //     setData(response.body)
+                    //     // console.log(response.body[0]);
+                    //   });
+                    console.log("conntect Success")
                 }
                 }
-                onDisconnect={ () => {console.log('disconnect')}  }
+                onDisconnect={() => { console.log('disconnect') }}
                 onMessage={(msg) => {
                     // let dataAl = {
                     //     username:props.data.login.info.user != '' ? props.data.login.info.user.username : 'guest',
                     //     content:msg.body
                     // }
-                    console.log("=>>",msg)
-                    setMess([...mess,msg]);
-            }}
-                ref={ (client) => { clientRef = client }}
-                
+                    console.log("=>>", msg)
+                    setMess([...mess, msg]);
+                }}
+                ref={(client) => { clientRef = client }}
+
             />
-            <MessageList messages={mess} />
+            <MessageList messages={mess&&mess.length>0 ? mess : data} />
             <div style={{ justifyContent: 'flex-end' }}>
                 <SendMessageForm sendMessage={sendMessage} />
             </div>
@@ -123,11 +130,12 @@ const Main = ({
 const mapStateToProps = (state) => ({
     data: state.chatReducer.data,
     room: state.chatReducer.room,
-  });
-  
+    isLoading: state.chatReducer.isLoading,
+});
+
 const mapDispatchToProps = {
     loadMore,
     createRoom,
-  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -3,15 +3,15 @@
 const MessageList = (props) => {
       return (
         <ul className="message-list">                 
-          {props.messages.map(message => {
+          {props.messages && props.messages.map(message => {
             console.log("helo",message)
             return (
              <li >
                <div>
-                 {message.username}
+                 {message.sendUserId}
                </div>
                <div>
-                 {message.content}
+                 {message.noidung}
                </div>
              </li>
            )
