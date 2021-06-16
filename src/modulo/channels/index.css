@@ -1,13 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.NavBar { grid-area: header; background-color: #202225; }
+.SlideBar { grid-area: menu; background-color: #2f3237; }
+.MainChat { grid-area: main; background-color: #36393f; }
+.RightBar { grid-area: right; background-color: #2f3237;}
+
 .App {
-    display: grid;
-    height: 100vh;
-    overflow: hidden;
-    grid-template: repeat(1, 1fr) / repeat(5, 1fr);
-  
-  
-  }
-  .Bar {
-    background-color: #252525;
-    color: white;
-    overflow: auto;
+  height: 100vh;
+  display: grid;
+  grid-template-areas:
+    'menu header header '
+    'menu main  right'
+    'menu main  right';
+  grid-template-rows: 5%;
+  grid-template-columns: 10% 80% 10% ;
+  padding: 10px;
+  background-color: #36393f;
   }

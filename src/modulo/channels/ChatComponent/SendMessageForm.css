@@ -1,0 +1,4 @@
+input {
+    width: calc(100% - 50px);
+    align-self: center;
+}

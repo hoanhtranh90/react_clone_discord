@@ -6,11 +6,15 @@ const Channels = () => {
     let { id } = useParams();
     return (
         <div className="App">
-            <div className="Bar">
+            <div className="NavBar">NavBar</div>
+            <div className="SlideBar">
                 <SlideBar/>
             </div>
-            channels: {id} 
-            <Main id={id}/>
+            
+            <div className="MainChat"><Main id={id}/></div>
+            <div className="RightBar">rightBar</div>
+            {/* channels: {id}  */}
+           
         </div>
     )
 }

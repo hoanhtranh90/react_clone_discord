@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import ChatApi from '../../../shared/api/chatComponent.api';
 
 export const ACTION_TYPES = {
-    SET_DATA: 'chatModule/SET_DATA',
+    SET_LIST: 'chatModule/SET_LIST',
     SET_ROOM: 'chatModule/SET_ROOM',
     SET_USER: 'chatModule/SET_USER',
     LOAD_HISTORY: 'chatModule/LOAD_HISTORY',
@@ -11,7 +11,7 @@ export const ACTION_TYPES = {
 
 const initialState = {
     user: null,
-    list: null,
+    list: [],
     room: null,
     isLoading: false,
     // query: {
@@ -25,10 +25,10 @@ const ChatReducer = (
     action
 ) => {
     switch (action.type) {
-        case ACTION_TYPES.SET_DATA:
+        case ACTION_TYPES.SET_LIST:
             return {
                 ...state,
-                data: action.payload.list
+                list: action.payload.list
             };
         case ACTION_TYPES.SET_ROOM:
             return {
@@ -71,6 +71,19 @@ export const loadMore = (roomName) => async (dispatch, getState) => {
         //   dispatch({ type: ACTION_TYPES.SET_QUERY, payload: { query } });
     }
 };
+export  const updateData = (data) => async (dispatch, getState) => {
+    let form = {
+        noidung: data.noidung,
+        user:{name:data.userName}
+    }
+    let oldList = getState().chatReducer.list;
+    const list = [...oldList,form]
+    dispatch({
+        type: ACTION_TYPES.SET_LIST,
+        payload: { list: list },
+    });
+}
+   
 
 export const createRoom = (roomName, userName) => async (dispatch, getState) => { //init Room
     console.log("roomName", roomName)
@@ -79,38 +92,42 @@ export const createRoom = (roomName, userName) => async (dispatch, getState) => 
         type: ACTION_TYPES.SET_IS_LOADING,
         payload: { isLoading: true },
     });
-   
-    let userForm = {
-        name: userName
-    }
-    let createSuccsess = await ChatApi.createUser(userForm);
-    console.log("=>>>>>>>>>>>reducer.data0", createSuccsess)
+   let initForm = {
+       userName,
+       roomName
+   }
+   let data = await ChatApi.initRoom(initForm);
+   console.log("=????>>>>>>>>>>>>>>>>>>>",data)
+    // let userForm = {
+    //     name: userName
+    // }
+    // let createSuccsess = await ChatApi.createUser(userForm);
+    // console.log("=>>>>>>>>>>>reducer.data0", createSuccsess)
 
     let room = {
         name: roomName
     }
-    let createRoom = await ChatApi.createRoom(room);
-
+    // let createRoom = await ChatApi.createRoom(room);
     let dataHistory = await ChatApi.listChapData(room)
     console.log("=>>>>>>>>>dataHistory",dataHistory)
 
 
-    let data1 = await ChatApi.createUser_Room();
-    console.log("=>>>>>>>>>>>reducer.data1", data1)
+    // let data1 = await ChatApi.createUser_Room();
+    // console.log("=>>>>>>>>>>>reducer.data1", data1)
 
 
     dispatch({
-        type: ACTION_TYPES.SET_DATA,
+        type: ACTION_TYPES.SET_LIST,
         payload: { list: dataHistory.data },
     });
-    dispatch({
-        type: ACTION_TYPES.SET_ROOM,
-        payload: { room: roomName },
-    });
-    dispatch({
-        type: ACTION_TYPES.SET_USER,
-        payload: { user: userName },
-    });
+    // dispatch({
+    //     type: ACTION_TYPES.SET_ROOM,
+    //     payload: { room: roomName },
+    // });
+    // dispatch({
+    //     type: ACTION_TYPES.SET_USER,
+    //     payload: { user: userName },
+    // });
     dispatch({
         type: ACTION_TYPES.SET_IS_LOADING,
         payload: { isLoading: false },

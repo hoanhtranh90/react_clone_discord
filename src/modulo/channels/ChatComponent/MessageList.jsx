@@ -2,13 +2,13 @@
 
 const MessageList = (props) => {
       return (
-        <ul className="message-list">                 
+        <ul>                 
           {props.messages && props.messages.map(message => {
             console.log("helo",message)
             return (
              <li >
                <div>
-                 {message.sendUserId}
+                 {message.user.name}
                </div>
                <div>
                  {message.noidung}

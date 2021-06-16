@@ -1,0 +1,19 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
+.MessageList { grid-area: message; background-color: #799dd4; }
+.SendMessForm { grid-area: input; background-color: #249724; }
+
+
+.main {
+    display: grid;
+    grid-template-areas:
+    'message'
+    'input';
+    background: gray;
+    
+    grid-template-rows: 90vh 5vh;
+}

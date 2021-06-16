@@ -8,15 +8,15 @@ import SockJsClient from 'react-stomp';
 import { useRef } from "react";
 import axios from "axios";
 import { Button } from '@material-ui/core';
-import { createRoom, loadMore } from "./chat.Reducer";
+import { createRoom, loadMore, updateData } from "./chat.Reducer";
 import { connect } from 'react-redux';
-
+import "./Main.css"
 
 const Main = ({
-    id, data, room,
-    createRoom, loadMore, isLoading
+    id, list, room,
+    createRoom, updateData, isLoading
 }) => {
-    console.log("data: ", data)
+    console.log("data: ", list)
     console.log("room: ", room)
     const url = "http://localhost:8080"
     const messageRef = useRef();
@@ -32,12 +32,10 @@ const Main = ({
         //     stompClient.send(`${url}/chatapp/chat/${id}`, JSON.stringify(msg), {});
         // }
         let msg = {
-            username: "YOU",
-            content: e,
-            roomId: id
+            userName: "UserName",
+            noidung: e,
         }
         clientRef.sendMessage('/app/send/message' + "/" + id, JSON.stringify(msg));
-        setMess([...mess, msg]);
     }
     const sendMessage = (e) => {
         send(e);
@@ -45,18 +43,9 @@ const Main = ({
 
     }
     useEffect(() => {
-        // axios.post("http://localhost:8080/saveRoom",{
-        //     name:id
-        // }).then(res => {
-        //     axios.get("http://localhost:8080/history?roomId="+id).then(res => {
-        //         console.log("=>>>",res)
-        //         setMess(res.data)
-        //     })
-        // })
         async function promise() {
             await createRoom(id, "UserName");
             await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>1")
-            setMess(data)
             await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>2")
 
         }
@@ -66,37 +55,8 @@ const Main = ({
     }, [id])
 
 
-    // const connect = () => {
-    //     socket = new SockJS("http://localhost:8080/ws");
-    //     stompClient = Stomp.over(socket);
-    //     stompClient.connect(
-    //         {},
-    //         frame => {
-    //             connected = true;
-    //             stompClient.subscribe(`${url}/room/${id}`, tick => {
-    //                 console.log("=>>>>>>>>>>>>>>>>", tick)
-    //                 console.log("=>>>>>>>>>>>>>>>>frame", frame)
-    //             });
-    //         },
-    //         error => {
-    //             console.log(error);
-    //             connected = false;
-    //         }
-    //     );
-    // }
-    // const disconnect = () => {
-    //     if (stompClient) {
-    //         stompClient.disconnect();
-    //     }
-    //     connected = false;
-    // }
-    // const tickleConnection = () => {
-    //     connected ? disconnect() : connect();
-    // }
-    if (isLoading) return <div>Loading</div>
-    else
     return (
-        <div style={{ height: 400, width: 600, backgroundColor: '#ebebeb' }} >
+        <div  >
             <SockJsClient url='http://localhost:8080/socket' topics={[`/topic/${id}`]}
                 onConnect={() => {
                     //  Fetch("https://messager-ws.herokuapp.com/history", {
@@ -114,21 +74,25 @@ const Main = ({
                     //     username:props.data.login.info.user != '' ? props.data.login.info.user.username : 'guest',
                     //     content:msg.body
                     // }
-                    console.log("=>>", msg)
-                    setMess([...mess, msg]);
+                    console.log("=>????>>>>", msg)
+
+                    updateData(msg)
+
                 }}
                 ref={(client) => { clientRef = client }}
 
             />
-            <MessageList messages={mess&&mess.length>0 ? mess : data} />
-            <div style={{ justifyContent: 'flex-end' }}>
-                <SendMessageForm sendMessage={sendMessage} />
-            </div>
+                {!isLoading ?
+                    <div className="main" >
+                        <div className="MessageList"><MessageList messages={list} /></div>
+                        <div className="SendMessForm"><SendMessageForm sendMessage={sendMessage} /></div>
+                    </div> : <div>loading</div>}
+
         </div>
     )
 }
 const mapStateToProps = (state) => ({
-    data: state.chatReducer.data,
+    list: state.chatReducer.list,
     room: state.chatReducer.room,
     isLoading: state.chatReducer.isLoading,
 });
@@ -136,6 +100,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     loadMore,
     createRoom,
+    updateData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
