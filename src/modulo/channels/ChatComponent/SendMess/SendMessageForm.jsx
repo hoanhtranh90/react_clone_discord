@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // import {
 //   Button, Form, Input, Layout
 // } from 'antd'
+import { SendOutlined, PictureOutlined } from '@ant-design/icons';
+
 import './SendMessageForm.css'
 const SendMessageForm = (props) => {
   const [mess, setMess] = useState(null);
-  const sendMess = () => {
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("=>>>>>>>>",mess)
+    // const text = mess.trim();
+
+    // if (text.length > 0) {
+    //   sendMessage(creds, chatId, { text });
+    // }
+
     props.sendMessage(mess)
-    setMess("");
-  }
+    setMess('');
+  };
+
+  const handleChange = (event) => {
+    setMess(event.target.value);
+
+  };
   return (
     <div>
       {/* <div className="bottom_wrapper">
@@ -28,10 +45,24 @@ const SendMessageForm = (props) => {
           <Button type="primary" style={{ marginLeft: 5 }} htmlType="submit" id="send" onClick={() =>sendMess()}>Send</Button>
         </Form.Item>
       </Form> */}
-      <form>
-          <input></input>
-          <button>helo</button>
-      </form>
+
+      {/* <form onSubmit={sendMess}>
+          <input type="text" value={mess} onChange={e => setMess(e.target.value) }></input>
+          <button type="submit" >helo</button>
+      </form> */}
+
+    <form className="message-form" onSubmit={handleSubmit}>
+      <input
+        className="message-input"
+        placeholder="Send a message..."
+        value={mess}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
+      <button type="submit" className="send-button">
+        <SendOutlined className="send-icon" style={{ fontSize: '20px' }}  />
+      </button>
+    </form>
     </div>
   )
 }

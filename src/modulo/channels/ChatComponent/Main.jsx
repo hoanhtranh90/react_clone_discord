@@ -1,6 +1,6 @@
 import { useState } from "react";
-import MessageList from './MessageList'
-import SendMessageForm from './SendMessageForm'
+import MessageList from './MessList/MessageList'
+import SendMessageForm from './SendMess/SendMessageForm'
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import { useEffect } from "react";
@@ -86,6 +86,7 @@ const Main = ({
                     <div className="main" >
                         <div className="MessageList"><MessageList messages={list} /></div>
                         <div className="SendMessForm"><SendMessageForm sendMessage={sendMessage} /></div>
+                        <div></div>
                     </div> : <div>loading</div>}
 
         </div>

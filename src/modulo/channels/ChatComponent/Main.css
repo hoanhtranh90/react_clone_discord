@@ -4,8 +4,20 @@
     box-sizing: border-box;
 } */
 
-.MessageList { grid-area: message; background-color: #799dd4; }
-.SendMessForm { grid-area: input; background-color: #249724; }
+.MessageList { 
+    grid-area: message; 
+    background-color: #36393f;
+    overflow: auto;
+    padding-left: 2%;
+    
+}
+::-webkit-scrollbar {display:none;}
+
+.SendMessForm { 
+    grid-area: input;
+    background-color: #2f3237; 
+    margin: 0 2%;
+}
 
 
 .main {
@@ -13,7 +25,7 @@
     grid-template-areas:
     'message'
     'input';
-    background: gray;
-    
-    grid-template-rows: 90vh 5vh;
+    background: #36393f;
+    overflow: hidden;
+    grid-template-rows: 85vh 5vh 5vh;
 }

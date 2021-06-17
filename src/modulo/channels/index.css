@@ -16,7 +16,9 @@
     'menu main  right'
     'menu main  right';
   grid-template-rows: 5%;
-  grid-template-columns: 10% 80% 10% ;
+  grid-template-columns: 15% 75% 10% ;
   padding: 10px;
   background-color: #36393f;
+  padding: 0;
+  margin: 0;
   }

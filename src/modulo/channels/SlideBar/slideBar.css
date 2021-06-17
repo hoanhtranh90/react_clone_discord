@@ -1,0 +1,23 @@
+.listUser {
+    list-style: none;
+}
+.userName1 {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 3rem;
+    vertical-align: baseline;
+    position: relative;
+    overflow: hidden;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    align-content: center;
+    margin: auto 0px;
+}
+.chatLine1 {
+    display: grid;
+    grid-template-columns: 50px auto;
+    padding: 10px 0px;
+
+}
+

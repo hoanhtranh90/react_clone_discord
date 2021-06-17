@@ -1,0 +1,20 @@
+.NavBar_Login_Button {
+    color: #fff;
+    grid-area: NavBar_Login_Button;
+    margin: auto 0px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.NavBar_Register_Button {
+    color: #fff;
+    grid-area: NavBar_Register_Button;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.NavBar_Container {
+    display: grid;
+    grid-template-areas:
+    '. . . . . . NavBar_Login_Button NavBar_Register_Button ';
+    grid-template-columns: auto auto auto auto auto auto 10% 10% ;
+    margin: auto 0px;
+}
