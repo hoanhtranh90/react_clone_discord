@@ -24,7 +24,7 @@ const MessageList = (props) => {
             </div>
             <div>
               <div className="userName">
-                {message.user.name}
+                {message.user.username}
               </div>
               <div className="content">
                 {message.noidung}

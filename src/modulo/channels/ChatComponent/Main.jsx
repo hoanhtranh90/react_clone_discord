@@ -7,32 +7,30 @@ import { useEffect } from "react";
 import SockJsClient from 'react-stomp';
 import { useRef } from "react";
 import axios from "axios";
-import { Button } from '@material-ui/core';
-import { createRoom, loadMore, updateData } from "./chat.Reducer";
-import { connect } from 'react-redux';
+import { createRoom, loadMore, updateData, checkExitsRoom } from "./chat.Reducer";
+import { connect, useSelector } from 'react-redux';
+import { Alert, Button, Space } from 'antd';
+
 import "./Main.css"
+import { useHistory } from "react-router-dom";
 
 const Main = ({
-    id, list, room,
+    id, list, room, checkExitsRoom, isExitsRoom, loadMore,
     createRoom, updateData, isLoading
 }) => {
-    console.log("data: ", list)
+    const user = useSelector(state => state.authReducer.user)
+    const history = useHistory();
     console.log("room: ", room)
-    const url = "http://localhost:8080"
+    console.log("user && user.username: ", user && user.username)
     const messageRef = useRef();
     var connected = false;
     var socket = '';
     var stompClient = '';
     let clientRef;
     const [mess, setMess] = useState([])
-    // const [data,setData] = useState([])
     const send = (e) => {
-        // if (stompClient && stompClient.connected) {
-        //     const msg = { name: "You", content: e, type: 'CHAT' };
-        //     stompClient.send(`${url}/chatapp/chat/${id}`, JSON.stringify(msg), {});
-        // }
         let msg = {
-            userName: "UserName",
+            userName: user && user.username,
             noidung: e,
         }
         clientRef.sendMessage('/app/send/message' + "/" + id, JSON.stringify(msg));
@@ -44,7 +42,8 @@ const Main = ({
     }
     useEffect(() => {
         async function promise() {
-            await createRoom(id, "UserName");
+            await checkExitsRoom(id)
+            await loadMore(id)
             await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>1")
             await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>2")
 
@@ -82,12 +81,28 @@ const Main = ({
                 ref={(client) => { clientRef = client }}
 
             />
-                {!isLoading ?
-                    <div className="main" >
-                        <div className="MessageList"><MessageList messages={list} /></div>
-                        <div className="SendMessForm"><SendMessageForm sendMessage={sendMessage} /></div>
-                        <div></div>
-                    </div> : <div>loading</div>}
+            {!isExitsRoom && <Alert
+                message="Phòng chưa tồn tại"
+                description="Bạn có muốn tạo phòng này"
+                type="info"
+                action={
+                    <Space direction="vertical">
+                        <Button size="small" type="primary" onClick={()=>createRoom(id, user && user.username)}>
+                            Đồng ý
+                        </Button>
+                        <Button size="small" danger type="ghost" onClick={()=>history.push('/channel')}>
+                            Từ chối
+                        </Button>
+                    </Space>
+                }
+                
+            />}
+            {!isLoading ?
+                <div className="main" >
+                    <div className="MessageList"><MessageList messages={list} /></div>
+                    <div className="SendMessForm"><SendMessageForm sendMessage={sendMessage} /></div>
+                    <div></div>
+                </div> : <div>loading</div>}
 
         </div>
     )
@@ -96,12 +111,14 @@ const mapStateToProps = (state) => ({
     list: state.chatReducer.list,
     room: state.chatReducer.room,
     isLoading: state.chatReducer.isLoading,
+    isExitsRoom: state.chatReducer.isExitsRoom,
 });
 
 const mapDispatchToProps = {
     loadMore,
     createRoom,
-    updateData
+    updateData,
+    checkExitsRoom
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -22,13 +22,15 @@ export const createContent = async (form) =>
 export const createUserContentRoom = async () =>
     axios.post('create/send')
 
+    export const checkRoomExits = async (form) =>
+    axios.post('create/check',form)
 const ChatApi = {
     listChapData,
     initRoom,
     createRoom,
     createUser,
     createUser_Room,
-
+    checkRoomExits,
     createContent,
     createUserContentRoom
 };

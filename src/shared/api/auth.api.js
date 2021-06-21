@@ -2,25 +2,33 @@
 import axios from 'axios';
 
 export const login = ({ username, password }) => {
-    const token = localStorage.getItem('jwtToken');
-    const data = new FormData();
-    data.append('username', username);
-    data.append('password', password);
+    console.log("=>>>>>>>>>>",username)
+    const data = {
+      username,
+      password
+    }
     return axios
-      .post('/auth', data, {
+      .post('/login', data, {
         headers: {
-          Authorization: `Basic ${token}`,
           'Content-Type': 'application/json',
         },
       })
       .then(res => {
-        // console.log("=>>>>>>>>>>>>>>", res)
+        console.log("=>>>>>>>>>>>>>>", res)
         return res.data;
       });
   };
 
+  export const getInfo = () => {
+    return axios.get('/getInfo')
+    .then(res => {
+      console.log("=>>>>>>>>>>>>>>>>",res)
+      return res.data
+    })
+  }
   const AuthAPI = {
     login,
+    getInfo
     
   };
   

@@ -1,22 +1,35 @@
 import React from 'react';
-import { Input, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 import {
     BrowserRouter as Router,
     Link,
-  } from "react-router-dom";
+    useHistory,
+} from "react-router-dom";
 import "./home.css"
 import { useState } from 'react';
 const Home = () => {
-    const [room,setRoom] = useState('')
+        const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
+    const onFinish = () => {
+        history.push(`/channels/${room}`)
+
+    }
+    const history = useHistory();
+    const [room, setRoom] = useState('')
     return (
         <div className="Homee">
-            
-            <form style={{width:'20%'}} className="form_">
-                <Input placeholder="Room" size="large" value={room} onChange={e => setRoom(e.target.value)}/>
-                <Link to={`/channels/${room}`}>
-                <Button type="primary">Login</Button>
-                </Link>
-            </form>
+
+            <Form
+                style={{ width: '20%' }} className="form_"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}>
+                <Input placeholder="Room" size="large" value={room} onChange={e => setRoom(e.target.value)} />
+                {/* <Link to={`/channels/${room}`}> */}
+                <Button type="primary" htmlType="submit">Login</Button>
+                {/* </Link> */}
+            </Form>
         </div>
     )
 }

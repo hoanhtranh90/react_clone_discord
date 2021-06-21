@@ -9,10 +9,10 @@ axios.defaults.baseURL = SERVER_API_URL;
 
 const setupAxiosInterceptors = (dispatch, onUnauthenticated) => {
   const onRequestSuccess = async (config) => {
-    // const token = await localStorage.getItem('jwtToken');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token = await localStorage.getItem('jwtToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     config.paramsSerializer = params =>
       qs.stringify(params, {
         arrayFormat: 'repeat',
