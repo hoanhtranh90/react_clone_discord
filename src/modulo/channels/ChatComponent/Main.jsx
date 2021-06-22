@@ -81,7 +81,7 @@ const Main = ({
                 ref={(client) => { clientRef = client }}
 
             />
-            {!isExitsRoom && <Alert
+            {!isExitsRoom ? <Alert
                 message="Phòng chưa tồn tại"
                 description="Bạn có muốn tạo phòng này"
                 type="info"
@@ -96,13 +96,13 @@ const Main = ({
                     </Space>
                 }
                 
-            />}
-            {!isLoading ?
+            /> : 
+            !isLoading ?
                 <div className="main" >
                     <div className="MessageList"><MessageList messages={list} /></div>
                     <div className="SendMessForm"><SendMessageForm sendMessage={sendMessage} /></div>
                     <div></div>
-                </div> : <div>loading</div>}
+                </div> : <div>loading</div>}}
 
         </div>
     )

@@ -128,6 +128,10 @@ export const createRoom = (roomName, userName) => async (dispatch, getState) => 
         type: ACTION_TYPES.SET_IS_LOADING,
         payload: { isLoading: false },
     });
+    dispatch({
+        type: ACTION_TYPES.SET_EXITS_ROOM,
+        payload: { isExitsRoom: true },
+    });
 }
 
 export default ChatReducer;

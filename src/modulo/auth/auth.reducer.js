@@ -65,12 +65,46 @@ export const login = (username, password) => async dispatch => {
   } catch (e) {
     dispatch({
       type: ACTION_TYPES.ERROR,
-      payload: { errorMessage: true },
+      payload: { },
       // payload: { errorMessage: 'Có lỗi xảy ra !' },
     });
 
   }
 };
+
+export const register = (username, password) => async dispatch => {
+  try {
+    const data = await AuthAPI.register({ username, password });
+    console.log("=>>>>>>>>>>>>>", data)
+    if (!data) {
+      window.alert("Thông báo", "Kiểm tra tên đăng nhập hoặc mật khẩu")
+      dispatch({
+        type: ACTION_TYPES.ERROR,
+        payload: { errorMessage: "Kiểm tra tên đăng nhập hoặc mật khẩu" },
+      });
+    } else {
+
+      // await localStorage.setItem('jwtToken', data);
+      // dispatch(fetchInfo());
+      console.log("data",data)
+    }
+  } catch (e) {
+    dispatch({
+      type: ACTION_TYPES.ERROR,
+      payload: { },
+      // payload: { errorMessage: 'Có lỗi xảy ra !' },
+    });
+
+  }
+}
+export const logOut = () => async dispatch => {
+
+  dispatch({
+    type: ACTION_TYPES.SIGN_OUT,
+    payload: { errorMessage: true },
+    // payload: { errorMessage: 'Có lỗi xảy ra !' },
+  });
+}
 
 export const fetchInfo = () => async (dispatch, getState) => {
   dispatch({

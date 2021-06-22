@@ -1,10 +1,11 @@
 import React from 'react'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useState } from 'react';
-import { login } from './auth.reducer';
+import { login, register } from './auth.reducer';
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+
 const layout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 10 },
@@ -12,15 +13,21 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 7, span: 16 },
 };
-const Auth = ({login,isLoading}) => {
+const Register = ({login,isLoading,register}) => {
     const [userName,serUserName] = useState('');
     const [pass,setPass] = useState('');
+    const [pass1,setPass1] = useState('');
     const history = useHistory();
     const onFinish = (values) => {
         console.log('Success:', values);
         console.log('userName:', userName);
         console.log('pass:', pass);
-        login(userName,pass)
+        register(userName,pass)
+        alert("Đăng ký thành công, đăng nhập ngay");
+        history.push('/auth')
+
+
+        
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -55,6 +62,13 @@ const Auth = ({login,isLoading}) => {
             >
                 <Input.Password onChange={e => setPass(e.target.value)}/>
             </Form.Item>
+            <Form.Item
+                label="Nhập lại password"
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+                <Input.Password onChange={e => setPass1(e.target.value)}/>
+            </Form.Item>
 
             {/* <Form.Item {...tailLayout} name="remember" valuePropName="checked">
                 <Checkbox>Remember me</Checkbox>
@@ -62,10 +76,7 @@ const Auth = ({login,isLoading}) => {
 
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
-                    Login
-                </Button>
-                <Button type="primary" style={{marginLeft:20}} onClick={()=> history.push('/register')}>
-                    Register
+                    Đồng ý
                 </Button>
             </Form.Item>
         </Form> : <div>loadiing </div>}
@@ -78,7 +89,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    login,
+    login,register
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

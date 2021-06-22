@@ -11,34 +11,53 @@ import {
   Link,
   useRouteMatch,
   useParams
-} from "react-router-dom";import Channels from "./modulo/channels";
+} from "react-router-dom"; import Channels from "./modulo/channels";
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchInfo } from "./modulo/auth/auth.reducer";
 import { useEffect } from "react";
+import Register from "./modulo/auth/Register";
 function App() {
   const dispatch = useDispatch();
-  const isLogin = useSelector( state => state.authReducer.isLogin)
-  const isLoading = useSelector( state => state.authReducer.isLoading)
-  console.log("=>>>>>>>>>>>",isLogin)
+  const isLogin = useSelector(state => state.authReducer.isLogin)
+  const isLoading = useSelector(state => state.authReducer.isLoading)
+  console.log("=>>>>>>>>>>>", isLogin)
 
-  useEffect(()=>{
-    if(localStorage.getItem('jwtToken')){
+  useEffect(() => {
+    if (localStorage.getItem('jwtToken')) {
       dispatch(fetchInfo());
+      console.log("=>>>>>>>>>>>>>>helop")
     }
-    else return <Auth />;
-  },[])
+  }, [])
+
+  useEffect(() => {
+    if (!localStorage.getItem('jwtToken')) {
+      console.log("=>>abc")
+      return <Auth />;
+    }
+  }, [localStorage.getItem('jwtToken')])
 
   // if(isLoading)
   // return <div>Loading</div>
   // else
   return (
-    <Router>
-      <Switch>
-        {/* <Route path="/auth" component={Auth} /> */}
-        <Route path="/channels/:id" component={Channels}/>
-        <Route path="/" component={isLogin ? Home : Auth} />
-      </Switch>
-  </Router>
+    <>
+      {isLogin ?
+        <Router>
+          <Switch>
+            <Route path="/auth" component={isLogin ? Home : Auth} />
+            <Route path="/channels/:id" component={Channels} />
+            <Route path="/" component={Home} />
+          </Switch>
+        </Router> :
+        <Router>
+          <Switch>
+            <Route path="/register" component={Register} />
+            <Route path="/auth" component={Auth} />
+            <Route path="/" component={Auth} />
+          </Switch>
+        </Router>
+      }
+    </>
   );
 }
 

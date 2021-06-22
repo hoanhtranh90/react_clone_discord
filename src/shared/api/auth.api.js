@@ -19,6 +19,17 @@ export const login = ({ username, password }) => {
       });
   };
 
+  export const register = ({ username, password }) => {
+    const data = {
+      username,
+      password
+    }
+    return axios.post('/register',data)
+    .then(res => {
+      console.log("=>>>",res)
+      return res.data
+    })
+  }
   export const getInfo = () => {
     return axios.get('/getInfo')
     .then(res => {
@@ -28,7 +39,8 @@ export const login = ({ username, password }) => {
   }
   const AuthAPI = {
     login,
-    getInfo
+    getInfo,
+    register
     
   };
   
