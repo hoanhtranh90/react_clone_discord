@@ -20,12 +20,10 @@ function App() {
   const dispatch = useDispatch();
   const isLogin = useSelector(state => state.authReducer.isLogin)
   const isLoading = useSelector(state => state.authReducer.isLoading)
-  console.log("=>>>>>>>>>>>", isLogin)
 
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
       dispatch(fetchInfo());
-      console.log("=>>>>>>>>>>>>>>helop")
     }
   }, [])
 

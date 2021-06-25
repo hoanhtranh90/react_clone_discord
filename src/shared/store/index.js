@@ -6,17 +6,19 @@ import loggerMiddleware from '../../config/logger-middleware';
 
 import authReducer from '../../modulo/auth/auth.reducer';
 import chatReducer from '../../modulo/channels/ChatComponent/chat.Reducer'
+import slideBarReducer from '../../modulo/channels/SlideBar/slideBar.reducer'
 const middleware = [thunk, loggerMiddleware];
 
 
 const reducer = combineReducers({
   authReducer,
-  chatReducer
+  chatReducer,
+  slideBarReducer
 });
 
 const store = configureStore({
   reducer,
-  middleware,
+  middleware
 });
 
 export default store;

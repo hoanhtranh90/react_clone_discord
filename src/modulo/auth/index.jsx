@@ -56,10 +56,6 @@ const Auth = ({login,isLoading}) => {
                 <Input.Password onChange={e => setPass(e.target.value)}/>
             </Form.Item>
 
-            {/* <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                <Checkbox>Remember me</Checkbox>
-            </Form.Item> */}
-
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
                     Login

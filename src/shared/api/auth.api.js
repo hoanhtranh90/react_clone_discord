@@ -14,7 +14,6 @@ export const login = ({ username, password }) => {
         },
       })
       .then(res => {
-        console.log("=>>>>>>>>>>>>>>", res)
         return res.data;
       });
   };
@@ -30,13 +29,9 @@ export const login = ({ username, password }) => {
       return res.data
     })
   }
-  export const getInfo = () => {
-    return axios.get('/getInfo')
-    .then(res => {
-      console.log("=>>>>>>>>>>>>>>>>",res)
-      return res.data
-    })
-  }
+  export const getInfo = () => 
+     axios.get('/getInfo')
+  
   const AuthAPI = {
     login,
     getInfo,

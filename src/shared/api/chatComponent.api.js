@@ -2,37 +2,27 @@ import axios from 'axios';
 
 export const listChapData = async (form) =>
     axios.post(`room/loadHistory`, form)
-
-
 export const createRoom = async (form) =>
     axios.post('create/save_changeR', form)
 
 export const initRoom = async (form) =>
     axios.post('create/init', form)
 
-export const createUser = async (form) =>
-    axios.post('create/save_changeU', form)
+export const addUser = async (form) =>
+    axios.post('create/add', form)
 
-export const createUser_Room = async () =>
-    axios.post('create/saveR_U')
+export const checkRoomExits = async (form) =>
+    axios.post('create/check', form)
 
-export const createContent = async (form) =>
-    axios.post('create/save_C', form)
-
-export const createUserContentRoom = async () =>
-    axios.post('create/send')
-
-    export const checkRoomExits = async (form) =>
-    axios.post('create/check',form)
+export const sendMess = async (form) =>
+    axios.post('room/sendMess', form)
 const ChatApi = {
     listChapData,
     initRoom,
+    addUser,
     createRoom,
-    createUser,
-    createUser_Room,
     checkRoomExits,
-    createContent,
-    createUserContentRoom
+    sendMess
 };
 
 export default ChatApi;

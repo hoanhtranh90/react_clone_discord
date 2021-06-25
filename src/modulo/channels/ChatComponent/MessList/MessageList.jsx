@@ -17,7 +17,7 @@ const MessageList = (props) => {
     <ul style={{ listStyle: 'none' }}>
       {props.messages && props.messages.map(message => {
         console.log("helo", message)
-        if(message.user.username !== user.username)
+        if(message.userName !== user.username)
         return (
           <li    className="chatLine">
             <div>
@@ -27,7 +27,7 @@ const MessageList = (props) => {
             </div>
             <div>
               <div className="userName">
-                {message.user.username}
+                {message.username}
               </div>
               <div className="content">
                 {message.noidung}

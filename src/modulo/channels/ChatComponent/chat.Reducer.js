@@ -73,7 +73,10 @@ export const loadMore = (roomName) => async (dispatch, getState) => {
     let room = {
         name: roomName
     }
+    console.log("active Loaddata")
     let dataHistory = await ChatApi.listChapData(room)
+    console.log("active Loaddata2")
+
     dispatch({
         type: ACTION_TYPES.SET_LIST,
         payload: { list: dataHistory.data },
@@ -81,12 +84,9 @@ export const loadMore = (roomName) => async (dispatch, getState) => {
 };
 export const updateData = (data) => async (dispatch, getState) => {
     console.log("=>>>>data", data)
-    let form = {
-        noidung: data.noidung,
-        user: { username: data.userName }
-    }
+
     let oldList = getState().chatReducer.list;
-    const list = [...oldList, form]
+    const list = [...oldList, data]
     dispatch({
         type: ACTION_TYPES.SET_LIST,
         payload: { list: list },
@@ -108,22 +108,6 @@ export const createRoom = (roomName, userName) => async (dispatch, getState) => 
 
     let data = await ChatApi.initRoom(initForm);
     console.log("=????>>>>>>>>>>>>>>>>>>>", data)
-
-    // let userForm = {
-    //     name: userName
-    // }
-    // let createSuccsess = await ChatApi.createUser(userForm);
-    // console.log("=>>>>>>>>>>>reducer.data0", createSuccsess)
-
-
-    // dispatch({
-    //     type: ACTION_TYPES.SET_ROOM,
-    //     payload: { room: roomName },
-    // });
-    // dispatch({
-    //     type: ACTION_TYPES.SET_USER,
-    //     payload: { user: userName },
-    // });
     dispatch({
         type: ACTION_TYPES.SET_IS_LOADING,
         payload: { isLoading: false },
@@ -131,6 +115,24 @@ export const createRoom = (roomName, userName) => async (dispatch, getState) => 
     dispatch({
         type: ACTION_TYPES.SET_EXITS_ROOM,
         payload: { isExitsRoom: true },
+    });
+}
+
+export const addUser = (roomName, userName) => async (dispatch, getState) => { //init Room
+    dispatch({
+        type: ACTION_TYPES.SET_IS_LOADING,
+        payload: { isLoading: true },
+    });
+    let initForm = {
+        userName,
+        roomName
+    }
+
+    let data = await ChatApi.addUser(initForm);
+    console.log("=????>>>>>>>>>>>>>>>>>>>", data)
+    dispatch({
+        type: ACTION_TYPES.SET_IS_LOADING,
+        payload: { isLoading: false },
     });
 }
 

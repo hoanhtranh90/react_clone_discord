@@ -7,27 +7,31 @@ import { useEffect } from "react";
 import SockJsClient from 'react-stomp';
 import { useRef } from "react";
 import axios from "axios";
-import { createRoom, loadMore, updateData, checkExitsRoom } from "./chat.Reducer";
+import { createRoom, loadMore, updateData, checkExitsRoom, addUser } from "./chat.Reducer";
 import { connect, useSelector } from 'react-redux';
 import { Alert, Button, Space } from 'antd';
 
 import "./Main.css"
 import { useHistory } from "react-router-dom";
+import { sendMess } from "../../../shared/api/chatComponent.api";
 
 const Main = ({
-    id, list, room, checkExitsRoom, isExitsRoom, loadMore,
-    createRoom, updateData, isLoading
+    id, 
+    list, 
+    room, 
+    checkExitsRoom, 
+    isExitsRoom,
+    loadMore,
+    addUser,
+    createRoom, 
+    updateData, 
+    isLoading
 }) => {
     const user = useSelector(state => state.authReducer.user)
     const history = useHistory();
     console.log("room: ", room)
     console.log("user && user.username: ", user && user.username)
-    const messageRef = useRef();
-    var connected = false;
-    var socket = '';
-    var stompClient = '';
     let clientRef;
-    const [mess, setMess] = useState([])
     const send = (e) => {
         let msg = {
             userName: user && user.username,
@@ -37,19 +41,21 @@ const Main = ({
     }
     const sendMessage = (e) => {
         send(e);
+        let form = {
+            noidung: e
+        }
+        sendMess(form)
         console.log(e)
 
     }
     useEffect(() => {
         async function promise() {
             await checkExitsRoom(id)
+            await addUser(id, user && user.username)
             await loadMore(id)
-            await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>1")
-            await console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>2")
 
         }
         promise()
-        // loadMore(id);
 
     }, [id])
 
@@ -69,10 +75,6 @@ const Main = ({
                 }
                 onDisconnect={() => { console.log('disconnect') }}
                 onMessage={(msg) => {
-                    // let dataAl = {
-                    //     username:props.data.login.info.user != '' ? props.data.login.info.user.username : 'guest',
-                    //     content:msg.body
-                    // }
                     console.log("=>????>>>>", msg)
 
                     updateData(msg)
@@ -97,12 +99,12 @@ const Main = ({
                 }
                 
             /> : 
-            !isLoading ?
+            (!isLoading ?
                 <div className="main" >
                     <div className="MessageList"><MessageList messages={list} /></div>
                     <div className="SendMessForm"><SendMessageForm sendMessage={sendMessage} /></div>
                     <div></div>
-                </div> : <div>loading</div>}}
+                </div> : <div>loadingg</div>)}
 
         </div>
     )
@@ -118,6 +120,7 @@ const mapDispatchToProps = {
     loadMore,
     createRoom,
     updateData,
+    addUser,
     checkExitsRoom
 };
 

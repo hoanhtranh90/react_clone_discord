@@ -4,7 +4,8 @@ export const ACTION_TYPES = {
   SIGN_IN: 'auth/SIGN_IN',
   SIGN_OUT: 'auth/SIGN_OUT',
   ERROR: 'auth/ERROR',
-  SET_LOADING: 'auth/SET_LOADING'
+  SET_LOADING: 'auth/SET_LOADING',
+  SET_IS_LOGIN:'auth/SET_IS_LOGIN'
 };
 
 const initialState = {
@@ -41,6 +42,11 @@ const AuthReducer = (
         ...state,
         isLoading: action.payload.isLoading,
       };
+      case ACTION_TYPES.SET_IS_LOGIN:
+        return {
+          ...state,
+          isLogin: action.payload.isLogin,
+        };
     default:
       return state;
   }
@@ -50,7 +56,6 @@ export const login = (username, password) => async dispatch => {
   console.log("hello", username)
   try {
     const data = await AuthAPI.login({ username, password });
-    console.log("=>>>>>>>>>>>>>", data)
     if (!data) {
       window.alert("Thông báo", "Kiểm tra tên đăng nhập hoặc mật khẩu")
       dispatch({
@@ -75,7 +80,6 @@ export const login = (username, password) => async dispatch => {
 export const register = (username, password) => async dispatch => {
   try {
     const data = await AuthAPI.register({ username, password });
-    console.log("=>>>>>>>>>>>>>", data)
     if (!data) {
       window.alert("Thông báo", "Kiểm tra tên đăng nhập hoặc mật khẩu")
       dispatch({
@@ -107,18 +111,31 @@ export const logOut = () => async dispatch => {
 }
 
 export const fetchInfo = () => async (dispatch, getState) => {
+  console.log("hello world")
   dispatch({
     type: ACTION_TYPES.SET_LOADING,
     payload: { isLoading: true },
   });
-  const info = await AuthAPI.getInfo();
-  console.log("hello world", info)
+  let info;
+  let error;
+  await AuthAPI.getInfo().then(res => {
+    info = res.data;
+  }).catch(e => {
+    error = e;
+  });
   if (info) {
     dispatch({
       type: ACTION_TYPES.SIGN_IN,
       payload: { user: info },
     });
-
+  }
+  if(error) {
+    localStorage.removeItem('jwtToken');
+    dispatch({
+      type: ACTION_TYPES.SET_IS_LOGIN,
+      payload: { isLogin: false },
+    });
+    window.location.replace('/auth')
   }
 
 };
